@@ -1,5 +1,5 @@
 /**
- * @author 12S24013 Adryan Julianto Panjaitan
+ * @author 12S24013-Adryan Julianto Panjaitan
  */
 // src/academic/driver/Driver4.java
 package academic.driver;

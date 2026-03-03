@@ -1,3 +1,4 @@
+//12S24013-Adryan Julianto Panjaitan
 // src/academic/model/Course.java
 package academic.model;
 
