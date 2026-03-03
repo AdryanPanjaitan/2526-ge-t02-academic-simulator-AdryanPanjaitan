@@ -1,45 +1,44 @@
-//12S24013 Adryan Julianto Panjaitan
-// src/academic/model/Student.java
 package academic.model;
+
+/**
+ * @author 12S24013 Adryan Julianto Panjaitan
+ * @author 12S24013 Adryan Julianto Panjaitan
+ */
 
 public class Student {
     private String nim;
     private String name;
-    private int entryYear; // Tahun masuk
-    private String major;  // Jurusan
+    private int entranceYear; // Angkatan
+    private String studyProgram; // Program Studi
 
-    // Constructor untuk membuat objek Student baru
-    public Student(String nim, String name, int entryYear, String major) {
+    // Constructor untuk inisialisasi objek Student
+    public Student(String nim, String name, int entranceYear, String studyProgram) {
         this.nim = nim;
         this.name = name;
-        this.entryYear = entryYear;
-        this.major = major;
+        this.entranceYear = entranceYear;
+        this.studyProgram = studyProgram;
     }
 
-    // Metode getter untuk mendapatkan NIM
+    // --- Getters untuk mengakses data Student ---
     public String getNim() {
         return nim;
     }
 
-    // Metode getter untuk mendapatkan nama
     public String getName() {
         return name;
     }
 
-    // Metode getter untuk mendapatkan tahun masuk
-    public int getEntryYear() {
-        return entryYear;
+    public int getEntranceYear() {
+        return entranceYear;
     }
 
-    // Metode getter untuk mendapatkan jurusan
-    public String getMajor() {
-        return major;
+    public String getStudyProgram() {
+        return studyProgram;
     }
 
-    // Metode toString untuk format output seperti yang diminta
+    // Method untuk mengubah representasi objek Student menjadi string sesuai format output
     @Override
     public String toString() {
-        // Kita pakai pembatas '|' seperti contoh output
-        return nim + "|" + name + "|" + entryYear + "|" + major;
+        return nim + "|" + name + "|" + entranceYear + "|" + studyProgram;
     }
 }

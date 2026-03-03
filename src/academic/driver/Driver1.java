@@ -1,86 +1,62 @@
-/**
- * @author 12S24013-Adryan Julianto Panjaitan
- */
-// src/academic/driver/Driver1.java
 package academic.driver;
 
-import academic.model.Course;
-import java.util.Scanner;
-import java.util.Arrays; // Untuk membantu menyalin array jika kita perlu memperbesar
+/**
+ * @author 12s24013 Adryan Julianto Panjaitan
+ * @author 12S24013 Adryan Julianto Panjaitan
+ */  
+
+// File: academic/driver/Driver1.java
+
+import academic.model.Course; // Mengimpor kelas Course dari paket academic.model
+import java.util.Scanner;    // Mengimpor kelas Scanner untuk membaca input pengguna
 
 public class Driver1 {
+    // Array untuk menyimpan objek-objek Course.
+    // Ukuran awal bisa diperkirakan atau menggunakan ArrayList jika jumlahnya tidak pasti.
+    // Untuk contoh ini, kita asumsikan maksimal 100 course, Anda bisa menyesuaikannya.
+    private static Course[] courses = new Course[100];
+    private static int courseCount = 0; // Menghitung jumlah course yang sudah disimpan
 
     public static void main(String[] args) {
-        // Kita pakai Scanner untuk membaca input dari keyboard
-        Scanner input = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in); // Membuat objek Scanner untuk membaca input dari konsol
+        String line; // Variabel untuk menyimpan setiap baris input
 
-        // Karena harus pakai array dan kita tidak tahu berapa banyak data,
-        // kita mulai dengan array ukuran kecil dan akan memperbesar jika penuh.
-        // Ini mirip konsep ArrayList tapi kita implementasi manual.
-        int initialCapacity = 5; // Kapasitas awal array
-        Course[] courses = new Course[initialCapacity];
-        int courseCount = 0; // Untuk melacak berapa banyak objek Course di dalam array
+        // Loop untuk membaca input baris demi baris hingga pengguna mengetik "---"
+        while (scanner.hasNextLine()) { // Memeriksa apakah ada baris input berikutnya
+            line = scanner.nextLine(); // Membaca satu baris input
 
-        System.out.println("Masukkan data mata kuliah (ketik '---' untuk berhenti):");
-
-        while (true) {
-            String line = input.nextLine();
-
-            // Cek apakah inputnya '---' untuk berhenti
-            if (line.equals("---")) {
-                break; // Keluar dari loop
+            if (line.equals("---")) { // Jika baris input adalah "---", hentikan proses input
+                break;
             }
 
-            // Asumsi format input: Course#NIM#NamaMataKuliah#SKS#Grade
-            // Contoh: Course#Kode001#Dasar Pemrograman#3#A
-            if (line.startsWith("Course#")) {
-                String[] parts = line.split("#");
+            // Memisahkan string input berdasarkan karakter "#"
+            // Contoh input: 12S2203#Object-oriented Programming#3#C
+            String[] parts = line.split("#"); 
 
-                // Kita harus pastikan ada cukup bagian setelah split
-                if (parts.length == 5) {
-                    try {
-                        // Ambil NIM, Nama Mata Kuliah, SKS, dan Grade
-                        String nim = parts[1]; // Kode001 diasumsikan NIM
-                        String courseName = parts[2];
-                        int sks = Integer.parseInt(parts[3]);
-                        String finalGrade = parts[4];
+            // Memastikan input memiliki 4 bagian yang diharapkan (code, name, credits, grade)
+            if (parts.length == 4) {
+                String code = parts[0];
+                String name = parts[1];
+                int credits = Integer.parseInt(parts[2]); // Mengubah string SKS menjadi integer
+                String grade = parts[3];
 
-                        // Buat objek Course baru
-                        Course newCourse = new Course(nim, courseName, sks, finalGrade);
-
-                        // Cek apakah array sudah penuh. Jika ya, kita perlu memperbesar array.
-                        if (courseCount == courses.length) {
-                            // Ini cara manual memperbesar array
-                            int newCapacity = courses.length * 2;
-                            courses = Arrays.copyOf(courses, newCapacity);
-                            System.out.println("DEBUG: Array diperbesar menjadi " + newCapacity); // Untuk mahasiswa, biar tahu prosesnya
-                        }
-
-                        // Tambahkan objek Course ke dalam array
-                        courses[courseCount] = newCourse;
-                        courseCount++;
-                    } catch (NumberFormatException e) {
-                        System.err.println("Error: SKS harus berupa angka. Baris dilewati: " + line);
-                    }
+                // Membuat objek Course baru dan menyimpannya ke dalam array
+                if (courseCount < courses.length) { // Memastikan array tidak penuh
+                    courses[courseCount] = new Course(code, name, credits, grade);
+                    courseCount++; // Menambah hitungan course
                 } else {
-                    System.err.println("Error: Format input tidak sesuai. Baris dilewati: " + line);
+                    System.err.println("Penyimpanan penuh, tidak bisa menambah course baru.");
                 }
             } else {
-                System.err.println("Error: Input tidak diawali 'Course#'. Baris dilewati: " + line);
+                System.err.println("Format input tidak valid: " + line);
             }
         }
 
-        // Setelah semua input selesai, kita tampilkan hasilnya
-        System.out.println("\n=== Hasil Data Mata Kuliah ===");
-        if (courseCount == 0) {
-            System.out.println("Tidak ada data mata kuliah yang dimasukkan.");
-        } else {
-            // Kita cuma loop sebanyak data yang benar-benar ada (courseCount)
-            for (int i = 0; i < courseCount; i++) {
-                System.out.println(courses[i].toString()); // toString() sudah disesuaikan dengan format '|'
-            }
+        // Setelah semua input diproses, tampilkan semua course yang telah disimpan
+        for (int i = 0; i < courseCount; i++) {
+            System.out.println(courses[i].toString()); // Memanggil toString() untuk format output yang diinginkan
         }
 
-        input.close(); // Penting: Jangan lupa tutup Scanner-nya
+        scanner.close(); // Menutup objek Scanner untuk mencegah kebocoran sumber daya
     }
 }

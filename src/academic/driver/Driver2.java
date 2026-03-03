@@ -1,79 +1,55 @@
-/**
- * @author 12S24013-Adryan Julianto Panjaitan
- */
-// src/academic/driver/Driver2.java
 package academic.driver;
 
-import academic.model.Student;
-import java.util.Scanner;
-import java.util.Arrays; // Untuk membantu menyalin array jika perlu memperbesar
+/**
+ * @author 12S24013 Adryan Julianto Panjaitan
+ * @author 12S24013 Adryan Julianto Panjaitan
+ */
+
+
+import academic.model.Student;   // Mengimpor kelas Student dari paket academic.model
+import java.util.Scanner;       // Mengimpor kelas Scanner untuk membaca input pengguna
+import java.util.ArrayList;     // Mengimpor kelas ArrayList karena jumlah mahasiswa tidak pasti
 
 public class Driver2 {
+    // Menggunakan ArrayList untuk menyimpan objek-objek Student
+    // ArrayList lebih fleksibel daripada array statis karena ukurannya bisa bertambah otomatis.
+    private static ArrayList<Student> students = new ArrayList<>();
 
     public static void main(String[] args) {
-        // Kita pakai Scanner untuk membaca input dari keyboard
-        Scanner input = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in); // Membuat objek Scanner untuk membaca input dari konsol
+        String line; // Variabel untuk menyimpan setiap baris input
 
-        // Sama seperti sebelumnya, kita pakai array dan perbesar manual jika penuh
-        int initialCapacity = 5; // Kapasitas awal array
-        Student[] students = new Student[initialCapacity];
-        int studentCount = 0; // Untuk melacak berapa banyak objek Student di dalam array
+        // Loop untuk membaca input baris demi baris hingga pengguna mengetik "---"
+        while (scanner.hasNextLine()) { // Memeriksa apakah ada baris input berikutnya
+            line = scanner.nextLine(); // Membaca satu baris input
 
-        System.out.println("Masukkan data mahasiswa (ketik '---' untuk berhenti):");
-
-        while (true) {
-            String line = input.nextLine();
-
-            // Cek apakah inputnya '---' untuk berhenti
-            if (line.equals("---")) {
-                break; // Keluar dari loop
+            if (line.equals("---")) { // Jika baris input adalah "---", hentikan proses input
+                break;
             }
 
-            // Asumsi format input: NIM#Nama#TahunMasuk#Jurusan
-            // Contoh: 12S20111#Jaka Sembung#2019#Information Systems
-            String[] parts = line.split("#");
+            // Memisahkan string input berdasarkan karakter "#"
+            // Contoh input: 12S20999#Wiro Sableng#2020#Information Systems
+            String[] parts = line.split("#"); 
 
-            // Pastikan ada 4 bagian setelah split
+            // Memastikan input memiliki 4 bagian yang diharapkan (nim, name, entranceYear, studyProgram)
             if (parts.length == 4) {
-                try {
-                    // Ambil NIM, Nama, Tahun Masuk, dan Jurusan
-                    String nim = parts[0];
-                    String name = parts[1];
-                    int entryYear = Integer.parseInt(parts[2]); // Tahun masuk harus angka
-                    String major = parts[3];
+                String nim = parts[0];
+                String name = parts[1];
+                int entranceYear = Integer.parseInt(parts[2]); // Mengubah string angkatan menjadi integer
+                String studyProgram = parts[3];
 
-                    // Buat objek Student baru
-                    Student newStudent = new Student(nim, name, entryYear, major);
-
-                    // Cek apakah array sudah penuh. Jika ya, kita perlu memperbesar array.
-                    if (studentCount == students.length) {
-                        int newCapacity = students.length * 2;
-                        students = Arrays.copyOf(students, newCapacity);
-                        System.out.println("DEBUG: Array mahasiswa diperbesar menjadi " + newCapacity); // Untuk mahasiswa, biar tahu prosesnya
-                    }
-
-                    // Tambahkan objek Student ke dalam array
-                    students[studentCount] = newStudent;
-                    studentCount++;
-                } catch (NumberFormatException e) {
-                    System.err.println("Error: Tahun masuk harus berupa angka. Baris dilewati: " + line);
-                }
+                // Membuat objek Student baru dan menambahkannya ke ArrayList
+                students.add(new Student(nim, name, entranceYear, studyProgram));
             } else {
-                System.err.println("Error: Format input tidak sesuai. Baris dilewati: " + line);
+                System.err.println("Format input tidak valid: " + line);
             }
         }
 
-        // Setelah semua input selesai, kita tampilkan hasilnya
-        System.out.println("\n=== Hasil Data Mahasiswa ===");
-        if (studentCount == 0) {
-            System.out.println("Tidak ada data mahasiswa yang dimasukkan.");
-        } else {
-            // Kita cuma loop sebanyak data yang benar-benar ada (studentCount)
-            for (int i = 0; i < studentCount; i++) {
-                System.out.println(students[i].toString()); // toString() sudah disesuaikan dengan format '|'
-            }
+        // Setelah semua input diproses, tampilkan semua student yang telah disimpan
+        for (Student student : students) { // Menggunakan enhanced for loop untuk iterasi ArrayList
+            System.out.println(student.toString()); // Memanggil toString() untuk format output yang diinginkan
         }
 
-        input.close(); // Jangan lupa tutup Scanner-nya
+        scanner.close(); // Menutup objek Scanner untuk mencegah kebocoran sumber daya
     }
 }
